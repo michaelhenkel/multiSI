@@ -4,7 +4,8 @@ using a single virtual machine instance for multiple service instances
 docker network create -d opencontrail -o name=dummy1 --subnet 172.16.0.0/29 dummy1
 docker network create -d opencontrail -o name=dummy2 --subnet 172.16.0.8/29 dummy2
 
-docker create --name SI --cap-add NET_ADMIN --net dummy1 alpine:3.1 tail -f /dev/null  && docker network connect dummy2 SI && docker start SI
+docker create --name SI --cap-add NET_ADMIN --net dummy1 alpine:3.1 tail -f /dev/null \
+     && docker network connect dummy2 SI && docker start SI
 
 docker network create -d opencontrail -o rt=1:2 -o name=net1_2 --subnet 10.1.2.0/24 net1_2
 docker network create -d opencontrail -o rt=1:3 -o name=net1_3 --subnet 10.1.3.0/24 net1_3
@@ -15,6 +16,7 @@ docker network create -d opencontrail -o rt=2:3 -o name=net2_3 --subnet 10.2.3.0
 docker network create -d opencontrail -o rt=3:1 -o name=net3_1 --subnet 10.3.1.0/24 net3_1
 docker network create -d opencontrail -o rt=3:2 -o name=net3_2 --subnet 10.3.2.0/24 net3_2
 
+docker exec -ti SI /bin/bash
 
 ip link add name net12 link eth0 type vlan id 12
 ip link add name net13 link eth0 type vlan id 13
